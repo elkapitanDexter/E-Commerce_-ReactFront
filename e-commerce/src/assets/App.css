@@ -1,0 +1,112 @@
+body{
+  font-family: 'Poppins', sans-serif;
+  background:rgb(222, 221, 221);
+}
+
+.myLink{
+  text-decoration: none;
+  color:#7b7979;
+  font-size:15px;
+  font-family: 'PT Sans', sans-serif;
+}
+.myLinkHeading{
+  text-decoration: none;
+  color:#128a88;
+  font-family: 'PT Sans', sans-serif;
+}
+.prodTitle{
+  font-weight:bold;
+}
+small{
+  font-size:11px;
+}
+.shad{
+  box-shadow:2px 2px 7px rgba(0, 0, 0, .3);
+}
+.shad2{
+  box-shadow:0px 2px 2px rgba(0, 0, 0, .3);
+}
+.cursor{
+  cursor: pointer;
+}
+.profileOption{
+  color:rgb(47, 46, 46);
+  font-size:14px;
+}
+.profileOption:hover{
+  color:rgb(47, 104, 220);
+}
+.red{
+  color:rgb(184, 55, 55);
+}
+.productCard{
+  border:1px solid #aeaeae;
+}
+.productCard:hover{
+  border-left:2px solid red;
+  border-right:2px solid red;
+  background:rgb(239, 249, 202);
+}
+.cstHeightCardDescriptionProduct{
+  height:60px;
+  overflow:hidden;
+}
+.borderRed1{
+  border:1px solid #813737;
+}
+.borderRed2{
+  border:1px solid #813737;
+}
+
+.avatarIMG{
+  width:30px;
+  height:30px;
+}
+.padding17{
+  padding:17px;
+}
+.cstTab{
+  padding:5px;
+  padding-left:10px;
+  border-radius:0px;
+}
+.cstCardBody1{
+  padding:5px;
+  padding-top:15px;
+  border-radius:5px;
+  box-shadow:0px 1px 3px rgba(0, 0, 0, .3);
+}
+.cstTabContent1{
+  background:#d5d2d2;
+  padding:5px;
+  border-radius: 5px;
+  box-shadow:0px 1px 3px rgba(0, 0, 0, .3);
+}
+
+
+/* Loading section          #############################################################################################################
+#########################################################################################################################################
+######################################################################################################################################### */  
+.skeleton {
+  opacity: .7;
+  animation: skeleton-loading 1s linear infinite alternate;
+}
+.skeleton-text {
+  width: 100%;
+  height: .5rem;
+  margin-bottom: .25rem;
+  border-radius: .125rem;
+}
+.skeleton-text:last-child {
+  margin-bottom: 0;
+  width: 80%;
+}
+@keyframes skeleton-loading {
+  0% {
+    background-color: hsl(200, 20%, 70%);
+  }
+
+  100% {
+    background-color: hsl(200, 20%, 95%);
+  }
+}
