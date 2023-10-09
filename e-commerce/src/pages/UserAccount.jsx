@@ -31,7 +31,13 @@ export default function UserAccount() {
                                                 <Nav.Link eventKey="first" className=" cstTab">My Account</Nav.Link>
                                             </Nav.Item>
                                             <Nav.Item>
-                                                <Nav.Link eventKey="second" className=" cstTab">Tab 2</Nav.Link>
+                                                <Nav.Link eventKey="second" className=" cstTab">My Purchase</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="third" className=" cstTab">Notification</Nav.Link>
+                                            </Nav.Item>
+                                            <Nav.Item>
+                                                <Nav.Link eventKey="fourth" className=" cstTab">My Vouchers</Nav.Link>
                                             </Nav.Item>
                                         </Nav>
                                     </div>
@@ -46,17 +52,67 @@ export default function UserAccount() {
                                     transition={false}
                                     >
                                         <Tab eventKey="profile" title="Profile" className='bg-white p-3'>
-                                            <h6>My Profile</h6>
+                                            <div>My Profile</div>
                                         </Tab>
                                         <Tab eventKey="bankCard" title="Bank & Cards" className='bg-white p-3'>
-                                            You bank and cards here...
+                                            Your bank and cards here...
+                                        </Tab>
+                                        <Tab eventKey="addresses" title="Addresses" className='bg-white p-3'>
+                                            Address Area here...
+                                        </Tab>
+                                        <Tab eventKey="changePassword" title="Change Password" className='bg-white p-3'>
+                                            Change your password here...
+                                        </Tab>
+                                    </Tabs>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="second">
+                                    <Tabs
+                                    defaultActiveKey="profile"
+                                    transition={false}
+                                    >
+                                        <Tab eventKey="profile" title="Profile" className='bg-white p-3'>
+                                            <div>My Profile</div>
+                                        </Tab>
+                                        <Tab eventKey="bankCard" title="Bank & Cards" className='bg-white p-3'>
+                                            Your bank and cards here...
                                         </Tab>
                                         <Tab eventKey="addresses" title="Addresses" className='bg-white p-3'>
                                             Address Area here...
                                         </Tab>
                                     </Tabs>
                                 </Tab.Pane>
-                                <Tab.Pane eventKey="second">Second tab content</Tab.Pane>
+                                <Tab.Pane eventKey="third">
+                                    <Tabs
+                                    defaultActiveKey="profile"
+                                    transition={false}
+                                    >
+                                        <Tab eventKey="profile" title="Profile" className='bg-white p-3'>
+                                            <div>My Profile</div>
+                                        </Tab>
+                                        <Tab eventKey="bankCard" title="Bank & Cards" className='bg-white p-3'>
+                                            Your bank and cards here...
+                                        </Tab>
+                                        <Tab eventKey="addresses" title="Addresses" className='bg-white p-3'>
+                                            Address Area here...
+                                        </Tab>
+                                    </Tabs>
+                                </Tab.Pane>
+                                <Tab.Pane eventKey="fourth">
+                                    <Tabs
+                                    defaultActiveKey="profile"
+                                    transition={false}
+                                    >
+                                        <Tab eventKey="profile" title="Profile" className='bg-white p-3'>
+                                            <div>My Profile</div>
+                                        </Tab>
+                                        <Tab eventKey="bankCard" title="Bank & Cards" className='bg-white p-3'>
+                                            Your bank and cards here...
+                                        </Tab>
+                                        <Tab eventKey="addresses" title="Addresses" className='bg-white p-3'>
+                                            Address Area here...
+                                        </Tab>
+                                    </Tabs>
+                                </Tab.Pane>
                             </Tab.Content>
                         </Col>
                     </Row>

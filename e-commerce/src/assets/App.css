@@ -48,7 +48,7 @@ small{
   background:rgb(239, 249, 202);
 }
 .cstHeightCardDescriptionProduct{
-  height:60px;
+  height:50px;
   overflow:hidden;
 }
 .borderRed1{
@@ -82,7 +82,10 @@ small{
   border-radius: 5px;
   box-shadow:0px 1px 3px rgba(0, 0, 0, .3);
 }
-
+.cstSpan{
+  width: 150px;
+  display:inline-block;
+}
 
 /* Loading section          #############################################################################################################
 #########################################################################################################################################
@@ -109,4 +112,30 @@ small{
   100% {
     background-color: hsl(200, 20%, 95%);
   }
+}
+
+
+/* Animations          #############################################################################################################
+#########################################################################################################################################
+######################################################################################################################################### */  
+
+.animated { 
+  background-repeat: no-repeat;
+  background-position: left top; 
+  padding-top:95px;
+  margin-bottom:60px;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s; 
+  -webkit-animation-fill-mode: both; 
+  animation-fill-mode: both; 
+}
+
+@keyframes bounce { 
+  0%, 20%, 50%, 80%, 100% {transform: translateY(0);} 
+  40% {transform: translateY(-15px);} 
+}
+
+.bounce { 
+  -webkit-animation-name: bounce; 
+  animation-name: bounce; 
 }

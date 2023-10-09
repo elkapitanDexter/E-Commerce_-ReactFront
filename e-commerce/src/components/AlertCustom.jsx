@@ -6,7 +6,7 @@ export default function AlertCustom(props) {
     <>
         <Alert variant={props.alertOption} onClose={() => props.setAlertState(false)} dismissible style={{ fontSize:'13px' }}>
             <Alert.Heading style={{ fontSize:'16px' }}><b>Error</b></Alert.Heading>
-            <p>{props.alertMessage}</p>
+            <p style={{ whiteSpace: 'pre-line' }}>{props.alertMessage}</p>
         </Alert>
     </>
   )

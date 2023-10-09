@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useStateContext } from '../contexts/ContextProvider';
 import AlertCustom from '../components/AlertCustom'
 
@@ -10,21 +10,37 @@ export default function ModalLoginRegister(props) {
     const { logReg, setLogReg, setUser, setToken } = useStateContext()
     const [alertState, setAlertState] = useState(false);
     const [alertOption, setAlertOption] = useState('danger');
-    const [alertMessage, setAlertMessage] = useState('');
     const [loading, setLoading] = useState(false);
     const [inputDisabled, setInputDisabled] = useState(false);
     const [nameRef, setNameRef] = useState('');
     const [emailRef, setEmailRef] = useState('');
     const [passwordRef, setPasswordRef] = useState('');
     const [rePasswordRef, setRePasswordRef] = useState('');
+    const [phoneRef, setPhoneRef] = useState('');
+    const [genderRef, setGenderRef] = useState('');
+    const [birthDay, setBirthDay] = useState('1');
+    const [birthMonth, setBirthMonth] = useState('November');
+    const [birthYear, setBirthYear] = useState(new Date().getFullYear());
     const [userN, setUserN] = useState('');
     const [userP, setUserP] = useState('');
 
+    const [alertMessage, setAlertMessage] = useState('');
+
+    const startYear = 1940;
+    const currentYear = new Date().getFullYear();
+    const years = [];
+    for (let year = currentYear; year >= startYear; year--) {
+        years.push(year);
+    }
+
+    const handleGenderChange = (event) => {
+        setGenderRef(event.target.value);
+    }
     const submitRegForm = (ev) => {
         ev.preventDefault();
         
         let err = 0;
-        if(nameRef === "" || emailRef === "" || passwordRef === "" || rePasswordRef === ""){
+        if(nameRef === "" || emailRef === "" || passwordRef === "" || rePasswordRef === "" || phoneRef === "" || genderRef === "" ){
             setAlertMessage("All fields are required. Please check all empty fields and provide a value to it. Thank you.");
             err = 1;
         }else if(passwordRef !== rePasswordRef){
@@ -39,6 +55,9 @@ export default function ModalLoginRegister(props) {
                 email: emailRef,
                 password: passwordRef,
                 password_confirmation: rePasswordRef,
+                phone: phoneRef,
+                gender: genderRef,
+                dateOfBirth: birthMonth + " " + birthDay + " " + birthYear,
             }
             setInputDisabled(true);
             performSubmitCredentialsForRegister(payload);
@@ -48,7 +67,6 @@ export default function ModalLoginRegister(props) {
             setAlertOption('danger');
         }
     }
-
     const submitLoginForm = (ev) => {
         ev.preventDefault();
 
@@ -72,46 +90,102 @@ export default function ModalLoginRegister(props) {
             setAlertOption('danger');
         }
     }
-
     const performSubmitCredentialsForRegister = async(payload) => {
         await axiosClient.post('/register', payload)
-            .then(({data}) => {
-                setUser(data.user);
-                setToken(data.token);
-                props.handleClose();
+            .then(data => {
+                console.log(data);
+                let errFound = "";
+                try {
+                    if(data.response.status){
+                        if(data.response.data.errors.name){
+                            errFound += data.response.data.errors.name + "\n"
+                        }
+                        if(data.response.data.errors.email){
+                            errFound += data.response.data.errors.email + "\n"
+                        }
+                        if(data.response.data.errors.password){
+                            errFound += data.response.data.errors.password + "\n"
+                        }
+                        if(data.response.data.errors.phone){
+                            errFound += data.response.data.errors.phone + '"\n"'
+                        }
+                        if(data.response.data.errors.gender){
+                            errFound += data.response.data.errors.gender + '\n'
+                        }
+                        if(data.response.data.errors.dateOfBirth){
+                            errFound += data.response.data.errors.dateOfBirth
+                        }
+                    }
+                } catch (error) {
+                    errFound = "";
+                }
+                if(errFound){
+                    setAlertMessage(errFound)
+                    setAlertState(true);
+                }
+                if(data.message === "Network Error"){
+                    setAlertMessage("Network Error. We will try to fix this issue as soon as possible. We appreciate your patience. Thank you!");
+                    setAlertState(true);
+                }
+                if(data.status === 200){
+                    setUser(data.data.user);
+                    setToken(data.data.token);
+                    props.handleClose();
+                }
                 setLoading(false);
                 props.stopSpinner(false);
                 setInputDisabled(false);
             })
             .catch(err => {
-                setAlertState(true);
-                setLoading(false);
-                setPasswordRef("");
-                setRePasswordRef("");
-                setAlertMessage(err.response.data.message);
+                try {
+                    setAlertState(true);
+                    setLoading(false);
+                    setPasswordRef("");
+                    setRePasswordRef("");
+                    setAlertMessage(err.response.data.message);
+                } catch (error) {
+                    setAlertMessage("Invalid credentials");
+                    setAlertState(true);
+                }
                 props.stopSpinner(false);
                 setInputDisabled(false);
             })
     }
     const performSubmitCredentialsForLogin = async(payload) => {
         await axiosClient.post('/login', payload)
-            .then(({data}) => {
-                setUser(data.user);
-                setToken(data.token);
-                props.handleClose();
+            .then(data => {
+                //console.log(data);
+                if(data.message === "Network Error"){
+                    setAlertMessage("Network Error. We will try to fix this issue as soon as possible. We appreciate your patience. Thank you!");
+                    setAlertState(true);
+                }else{
+                    setUser(data.data.user);
+                    setToken(data.data.token);
+                    props.handleClose();
+                }
                 setLoading(false);
                 props.stopSpinner(false);
                 setInputDisabled(false);
+                setUserN("");
+                setUserP("");
             })
             .catch(err => {
-                setLoading(false);
-                setUserP("");
-                setAlertState(true);
-                setAlertMessage(err.response.data.message);
+                try {
+                    setLoading(false);
+                    setUserP("");
+                    setAlertState(true);
+                    setAlertMessage(err.response.data.message);
+                } catch (error) {
+                    setAlertMessage("Invalid credentials");
+                    setAlertState(true);
+                }
                 props.stopSpinner(false);
                 setInputDisabled(false);
             })
     }
+
+    useEffect(() => {
+    }, [genderRef, birthDay, birthMonth, birthYear]);
 
     return (
         <>
@@ -120,8 +194,7 @@ export default function ModalLoginRegister(props) {
                 onHide={props.handleClose}
                 backdrop="static"
                 keyboard={false}
-                aria-labelledby="contained-modal-title-vcenter"
-                centered
+                className='animated bounce'
             >
                 {inputDisabled && <div className='padding17'>Please wait...</div> }
                 {!inputDisabled &&
@@ -276,6 +349,107 @@ export default function ModalLoginRegister(props) {
                                         onChange={(event) => setRePasswordRef(event.target.value) }
                                         disabled={inputDisabled}
                                     />
+                                </div>
+                                <div className="mt-3">
+                                    <Form.Label htmlFor="phoneNumber">11 Digit Phone No.:</Form.Label>
+                                    <Form.Control
+                                        type="text"
+                                        value={phoneRef}
+                                        name="phoneNumber"
+                                        placeholder="Required"
+                                        id="phoneNumber"
+                                        aria-label="Small"
+                                        aria-describedby="inputGroup-sizing-sm"
+                                        onChange={(event) => setPhoneRef(event.target.value) }
+                                        disabled={inputDisabled}
+                                    />
+                                </div>
+                                <div className="mt-3">
+                                    <div>Gender</div>
+                                    <br/>
+                                    <div style={{ paddingLeft:'30px' }}>
+                                        <span style={{ display: 'inline-block', alignItems: 'center' }}>
+                                            <div style={{ display:'flex' }}>
+                                                <Form.Check aria-label="option 1" type="radio" name="gender" onChange={handleGenderChange} id="male-radio" value="Male" className='cursor' /> &nbsp;&nbsp;
+                                                <label htmlFor="male-radio" className='cursor'>Male</label>
+                                            </div>
+                                        </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span style={{ display: 'inline-block', alignItems: 'center'}}>
+                                            <div style={{ display:'flex' }}>
+                                                <Form.Check aria-label="option 1" type="radio" name="gender" onChange={handleGenderChange} id="female-radio" value="Female" className='cursor' /> &nbsp;&nbsp;
+                                                <label htmlFor="female-radio" className='cursor'>Female</label>
+                                            </div>
+                                        </span>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                        <span style={{ display: 'inline-block', alignItems: 'center'}}>
+                                            <div style={{ display:'flex' }}>
+                                                <Form.Check aria-label="option 1" type="radio" name="gender" onChange={handleGenderChange} id="other-radio" value="Other" className='cursor' /> &nbsp;&nbsp;
+                                                <label htmlFor="other-radio" className='cursor'>Other</label>
+                                            </div>
+                                        </span>
+                                    </div>
+                                </div>
+                                <div className='mt-3'>
+                                    <div>Date of birth:</div>
+                                    <span className='cstSpan'>
+                                        <Form.Select aria-label="Default select example" name="birthDay" onChange={event => setBirthDay(event.target.value)}>
+                                            <option value="1">1</option>
+                                            <option value="2">2</option>
+                                            <option value="3">3</option>
+                                            <option value="4">4</option>
+                                            <option value="5">5</option>
+                                            <option value="6">6</option>
+                                            <option value="7">7</option>
+                                            <option value="8">8</option>
+                                            <option value="9">9</option>
+                                            <option value="10">10</option>
+                                            <option value="11">11</option>
+                                            <option value="12">12</option>
+                                            <option value="13">13</option>
+                                            <option value="14">14</option>
+                                            <option value="15">15</option>
+                                            <option value="16">16</option>
+                                            <option value="17">17</option>
+                                            <option value="18">18</option>
+                                            <option value="19">19</option>
+                                            <option value="20">20</option>
+                                            <option value="21">21</option>
+                                            <option value="22">22</option>
+                                            <option value="23">23</option>
+                                            <option value="24">24</option>
+                                            <option value="25">25</option>
+                                            <option value="26">26</option>
+                                            <option value="27">27</option>
+                                            <option value="28">28</option>
+                                            <option value="29">29</option>
+                                            <option value="30">30</option>
+                                            <option value="31">31</option>
+                                        </Form.Select>
+                                    </span>
+                                    <span className='cstSpan'>
+                                        <Form.Select aria-label="Default select example" name="birthMonth" onChange={event => setBirthMonth(event.target.value)}>
+                                            <option value="January">January</option>
+                                            <option value="February">February</option>
+                                            <option value="March">March</option>
+                                            <option value="April">April</option>
+                                            <option value="May">May</option>
+                                            <option value="June">June</option>
+                                            <option value="July">July</option>
+                                            <option value="August">August</option>
+                                            <option value="September">September</option>
+                                            <option value="October">October</option>
+                                            <option value="November">November</option>
+                                            <option value="December">December</option>
+                                        </Form.Select>
+                                    </span>
+                                    <span className='cstSpan'>
+                                        <Form.Select aria-label="Default select example" name="birthYear" onChange={event => setBirthYear(event.target.value)}>
+                                            {years.map((year, index) => (
+                                                <option key={index} value={year}>
+                                                {year}
+                                                </option>
+                                            ))}
+                                        </Form.Select>
+                                    </span>
                                 </div>
                                 <div className='clearfix'></div>
                                 <div className='pt-3 text-end'>
