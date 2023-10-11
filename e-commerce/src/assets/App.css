@@ -57,6 +57,11 @@ small{
 .borderRed2{
   border:1px solid #813737;
 }
+.cstBtnTWx{
+  position:fixed;
+  right:20px;
+  bottom:20px;
+}
 
 .avatarIMG{
   width:30px;
@@ -124,6 +129,14 @@ small{
   background-position: left top; 
   padding-top:95px;
   margin-bottom:60px;
+  -webkit-animation-duration: 1s;
+  animation-duration: 1s; 
+  -webkit-animation-fill-mode: both; 
+  animation-fill-mode: both; 
+}
+.animated2 { 
+  background-repeat: no-repeat;
+  background-position: left top;
   -webkit-animation-duration: 1s;
   animation-duration: 1s; 
   -webkit-animation-fill-mode: both; 
