@@ -9,6 +9,9 @@ body{
   font-size:15px;
   font-family: 'PT Sans', sans-serif;
 }
+.mySubLink{
+  color: #326bf1;
+}
 .myLinkHeading{
   text-decoration: none;
   color:#128a88;
@@ -33,9 +36,6 @@ small{
   color:rgb(47, 46, 46);
   font-size:14px;
 }
-.profileOption:hover{
-  color:rgb(47, 104, 220);
-}
 .red{
   color:rgb(184, 55, 55);
 }
@@ -45,7 +45,9 @@ small{
 .productCard:hover{
   border-left:2px solid red;
   border-right:2px solid red;
-  background:rgb(239, 249, 202);
+}
+.innerBaseThree{
+  background: #434949;
 }
 .cstHeightCardDescriptionProduct{
   height:50px;
@@ -62,7 +64,9 @@ small{
   right:20px;
   bottom:20px;
 }
-
+.white{
+  color:white;
+}
 .avatarIMG{
   width:30px;
   height:30px;
@@ -70,10 +74,20 @@ small{
 .padding17{
   padding:17px;
 }
+.bg-body-tertiary.text-dark::placeholder {
+  color: #333; /* Change to your desired light mode color */
+}
+/* Dark mode placeholder color */
+.bg-dark.bg-gradient.text-white::placeholder {
+  color: #ccc; /* Change to your desired dark mode color */
+}
 .cstTab{
   padding:5px;
   padding-left:10px;
   border-radius:0px;
+}
+.borderBottom{
+  border-bottom:1px solid #aeaeae;
 }
 .cstCardBody1{
   padding:5px;

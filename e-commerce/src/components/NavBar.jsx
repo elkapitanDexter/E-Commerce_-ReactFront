@@ -9,7 +9,7 @@ import PersistentModalLoading from '../components/PersistentModalLoading'
 import { Container, OverlayTrigger, Popover, Image, Button, Form, Navbar, Nav, Spinner } from 'react-bootstrap';
 
 export default function NavBar() {
-    const { user, token, setUser, setToken, setLogReg } = useStateContext()
+    const { user, token, lightMode, baseUrl, setUser, setToken, setLogReg, setLightMode } = useStateContext()
     const [showLoginRegister, setShowLoginRegister] = useState(false);
     const [persistentML, setPersistentML] = useState(false);
     const [messagePersistentModal, setMessagePersistentModal] = useState("");
@@ -67,23 +67,30 @@ export default function NavBar() {
             // Remove the event listener when the overlay is hidden
             document.removeEventListener('click', handleClickOutside);
         }
+        if(lightMode){
+            document.body.style.backgroundColor = 'rgb(222, 221, 221)';
+            document.body.style.color = '#393939';
+        }else{
+            document.body.style.backgroundColor = '#4a4e52';
+            document.body.style.color = 'white';
+        }
         // Cleanup: Remove the event listener when the component unmounts
         return () => {
             document.removeEventListener('click', handleClickOutside);
         };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [showOverlay]);
+    }, [showOverlay, lightMode]);
 
 
     return (
         <>
             { !token && <ModalLoginRegister handleClose={handleCloseLoginRegister} handleShow={handleShowLoginRegister} show={showLoginRegister} stopSpinner={setSpinnerProfileImageLoading} /> }
             <PersistentModalLoading show={persistentML} handleClose={handleClosePersistentML} message={messagePersistentModal} />
-            <Navbar expand="md" className="bg-body-tertiary shad" fixed='top'>
+            <Navbar expand="md" className={`${lightMode ? 'bg-body-tertiary shad' : 'bg-dark shad' }`} fixed='top'>
                 <Container>
                     <Navbar.Brand href=""><Link to="/" className='myLinkHeading'><b>Cst E-Commerce</b></Link></Navbar.Brand>
-                    <Navbar.Toggle aria-controls="navbarScroll" />
-                    <Navbar.Collapse id="navbarScroll">
+                    <Navbar.Toggle aria-controls="navbarScroll" className={`${lightMode ? 'bg-white' : 'bg-dark-subtle' }`} />
+                    <Navbar.Collapse id="navbarScroll" >
                         <Nav
                             className="me-auto mx-4 my-lg-0"
                             style={{ maxHeight: "100px" }}
@@ -118,44 +125,65 @@ export default function NavBar() {
                             <Form.Control
                             type="search"
                             name="searchH"
-                            placeholder="Search"
-                            className="me-2"
                             aria-label="Search"
+                            className={`me-1 ${lightMode ? 'bg-body-tertiary text-dark' : 'bg-dark bg-gradient text-white'}`}
+                            placeholder="Search"
                             size="sm"
                             /> 
                             <Button variant="outline-info" size="sm"><i className="fa-brands fa-searchengin"></i></Button>
                         </Form>
-                        &nbsp;&nbsp;&nbsp;
-                        <Button variant="light outline-dark" size='sm' className='border'><i className="fa-solid fa-moon"></i></Button>
-                        &nbsp;&nbsp;&nbsp;
-                        { (!token && !spinnerProfileImageLoading) && <Button variant="light outline-dark" onClick={handleShowLoginRegister} size="sm" className="border">Login | Signup</Button> }
+                        <span className='px-2' style={{ display:'inline-block' }}>
+                            <Button variant={`${lightMode ? 'light' : 'dark'}`} size='sm' className='border' onClick={() => setLightMode(!lightMode)}>
+                                {lightMode && <i className="fa-solid fa-moon"></i>}
+                                {!lightMode && <i className="fa-solid fa-cloud-sun"></i>}
+                            </Button>
+                        </span>
+                        { (!token && !spinnerProfileImageLoading) && <Button variant={`${lightMode ? 'light' : 'dark'} outline-dark`} onClick={handleShowLoginRegister} size="sm" className="border">Login | Signup</Button> }
                         { (token || spinnerProfileImageLoading) && 
                             <>
+                                <span className='pe-2'>
+                                    <Link to="/Account/MyNotification">
+                                        <Button variant={`${lightMode ? 'light' : 'dark'} outline-dark`} size="sm" className="border position-relative">
+                                            <i className="fa-regular fa-bell"></i>
+                                            <span className="position-absolute top-2 start-90 translate-middle badge rounded-pill bg-danger">
+                                                <small style={{ fontSize:'8px' }}>9</small>
+                                            </span>
+                                        </Button>
+                                    </Link>
+                                </span>
+                                <span className='pe-2'>
+                                    <Button variant={`${lightMode ? 'light' : 'dark'} outline-dark text-warning`} size="sm" className="border"><i className="fa-solid fa-cart-shopping"></i></Button>
+                                </span>
                                 <OverlayTrigger
                                     trigger="click"
                                     placement="bottom"
                                     show={showOverlay}
                                     onToggle={(show) => setShowOverlay(show)}
                                     overlay={
-                                        <Popover id="popover-positioned-bottom">
-                                        <Popover.Header as="h3"><small>Logged-in as</small><br/>{ user.name }</Popover.Header>
-                                        <Popover.Body>
-                                            <Link to="/UserAccount" className='myLink'><div className='profileOption cursor'><strong>My Account</strong></div></Link>
-                                            <div className='profileOption mt-1 cursor'><strong>My Purchase</strong></div>
-                                            <div 
-                                            className='profileOption mt-1 cursor' 
-                                            onClick={() => {
-                                                handleOpenPersistentML();
-                                                logout();
-                                            }}
-                                            >
-                                                <strong>Logout</strong>
-                                            </div>
-                                        </Popover.Body>
+                                        <Popover id="popover-positioned-bottom" className={`${lightMode ? 'bg-body-tertiary' : 'bg-dark bg-gradient'}`}>
+                                            <Popover.Header as="h3" className={`${lightMode ? 'bg-body-tertiary' : 'bg-dark bg-gradient'}`}>
+                                                <small>Logged-in as</small><br/>{ user.name }
+                                            </Popover.Header>
+                                            <Popover.Body>
+                                                <Link to="/Account" className='myLink'><div className={`profileOption cursor ${lightMode ? 'text-dark' : 'text-white'}`}><strong>Account Settings</strong></div></Link>
+                                                <Link to="/Account/MyPurchase" className='myLink'><div className={`profileOption mt-1 cursor ${lightMode ? 'text-dark' : 'text-white'}`}><strong>Purchase</strong></div></Link>
+                                                <Link to="/Account/MyVouchers" className='myLink'><div className={`profileOption mt-1 cursor ${lightMode ? 'text-dark' : 'text-white'}`}><strong>Vouchers</strong></div></Link>
+                                                <Link to="/Account/MyProducts/MyBusiness" className='myLink'><div className={`profileOption mt-1 cursor ${lightMode ? 'text-dark' : 'text-white'}`}><strong>Sell Products</strong></div></Link>
+                                                <div className='borderBottom mt-2'></div>
+                                                <div 
+                                                className={`profileOption mt-1 cursor ${lightMode ? 'text-dark' : 'text-white'}`}
+                                                onClick={() => {
+                                                    handleOpenPersistentML();
+                                                    logout();
+                                                }}
+                                                >
+                                                    <strong>Logout</strong>
+                                                </div>
+                                            </Popover.Body>
                                         </Popover>
                                     }
                                     >
-                                    <div>
+                                    <span>
                                         { spinnerProfileImageLoading &&
                                             <>
                                                 <Spinner animation="border" role="status" variant="secondary" style={{ width:'28px', height:'28px' }}>
@@ -163,8 +191,8 @@ export default function NavBar() {
                                                 </Spinner>
                                             </>
                                         }
-                                        { !spinnerProfileImageLoading && <Image ref={target} className='avatarIMG cursor skeleton' src="dexter.JPG" alt="" roundedCircle/>}
-                                    </div>
+                                        { !spinnerProfileImageLoading && <Image ref={target} className='avatarIMG cursor skeleton' src={`${baseUrl}/dexter.JPG`} alt="" roundedCircle style={{ display:'inline-block' }} />}
+                                    </span>
                                 </OverlayTrigger>
                             </>
                         }

@@ -7,7 +7,7 @@ import { Spinner, Tooltip, OverlayTrigger, InputGroup, Form, Modal, Button } fro
 import axiosClient from '../axios-client';
 
 export default function ModalLoginRegister(props) {
-    const { logReg, setLogReg, setUser, setToken } = useStateContext()
+    const { logReg, lightMode, setLogReg, setUser, setToken } = useStateContext()
     const [alertState, setAlertState] = useState(false);
     const [alertOption, setAlertOption] = useState('danger');
     const [loading, setLoading] = useState(false);
@@ -195,12 +195,13 @@ export default function ModalLoginRegister(props) {
                 backdrop="static"
                 keyboard={false}
                 className='animated bounce'
+                variant='secondary'
             >
-                {inputDisabled && <div className='padding17'>Please wait...</div> }
+                {inputDisabled && <div className={`padding17 ${lightMode ? 'text-dark bg-white' : 'bg-dark text-white'}`}>Please wait...</div> }
                 {!inputDisabled &&
                     <>
-                        <Modal.Header closeButton>
-                            <Modal.Title>
+                        <Modal.Header closeButton className={`${lightMode ? 'bg-light' : 'innerBaseThree'}`}>
+                            <Modal.Title className={`${lightMode ? 'text-dark' : 'text-white'}`}>
                                 <h6>
                                     { logReg && 
                                         <>
@@ -220,13 +221,13 @@ export default function ModalLoginRegister(props) {
                     </>
                 }
                 
-                <Modal.Body>
+                <Modal.Body className={`${lightMode ? 'bg-light' : 'innerBaseThree'}`}>
                     { alertState && <AlertCustom  alertOption={alertOption} setAlertState={setAlertState} alertMessage={alertMessage} />}
                     { logReg && 
                         <>
                             <form onSubmit={submitLoginForm}>
                                 <InputGroup size="sm" className="mb-3">
-                                    <InputGroup.Text id="userN">Username | Email : </InputGroup.Text>
+                                    <InputGroup.Text id="userN" className={`${lightMode ? 'bg-light' : 'innerBaseThree text-white'}`}>Username | Email : </InputGroup.Text>
                                     <Form.Control
                                     type="text"
                                     value={userN}
@@ -240,7 +241,7 @@ export default function ModalLoginRegister(props) {
                                     />
                                 </InputGroup>
                                 <InputGroup size="sm">
-                                    <InputGroup.Text id="userP">Password : </InputGroup.Text>
+                                    <InputGroup.Text id="userP" className={`${lightMode ? 'bg-light' : 'innerBaseThree text-white'}`}>Password : </InputGroup.Text>
                                     <Form.Control
                                     type="password"
                                     value={userP}
@@ -302,7 +303,7 @@ export default function ModalLoginRegister(props) {
                                         disabled={inputDisabled}
                                     />
                                     <Form.Text id="passwordHelpBlock" muted>
-                                        <small>Order: Given Name, Middle Initial., Last Name - Optional.</small>
+                                        <small className={`${lightMode ? 'text-dark' : 'text-white'}`}>Order: Given Name, Middle Initial., Last Name - Optional.</small>
                                     </Form.Text>
                                 </div>
                                 <div className="mt-3">
@@ -333,7 +334,7 @@ export default function ModalLoginRegister(props) {
                                         disabled={inputDisabled}
                                     />
                                     <Form.Text id="passwordHelpBlock" muted>
-                                        <small>Requires at least 8 characters, including a symbol and a number.</small>
+                                        <small className={`${lightMode ? 'text-dark' : 'text-white'}`}>Requires at least 8 characters, including a symbol and a number.</small>
                                     </Form.Text>
                                 </div>
                                 <div className="mt-3">
@@ -453,7 +454,7 @@ export default function ModalLoginRegister(props) {
                                 </div>
                                 <div className='clearfix'></div>
                                 <div className='pt-3 text-end'>
-                                    <Button variant="outline-danger" type='submit' size='sm' disabled={inputDisabled}>
+                                    <Button variant="danger" type='submit' size='sm' disabled={inputDisabled}>
                                         { loading &&
                                             <>
                                                 <Spinner
@@ -473,7 +474,7 @@ export default function ModalLoginRegister(props) {
                         </>
                     }
                 </Modal.Body>
-                <Modal.Footer>
+                <Modal.Footer className={`${lightMode ? 'bg-white' : 'innerBaseThree'}`}>
                     { logReg && 
                         <>
                             <OverlayTrigger
@@ -501,7 +502,7 @@ export default function ModalLoginRegister(props) {
                                 </Tooltip>
                             }
                             >
-                                <Button variant="outline-primary" size='sm' disabled={inputDisabled} onClick={() => {
+                                <Button variant="primary" size='sm' disabled={inputDisabled} onClick={() => {
                                     setLogReg(true);
                                     setAlertState(false);
                                 }}>Login</Button>

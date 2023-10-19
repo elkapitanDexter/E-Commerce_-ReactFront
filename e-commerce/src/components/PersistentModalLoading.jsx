@@ -11,8 +11,9 @@ export default function PersistentModalLoading(props) {
         keyboard={false}
         aria-labelledby="contained-modal-title-vcenter"
         centered
+        variant='secondary'
       >
-        <Modal.Body className='text-center'>
+        <Modal.Body className={`text-center text-dark`}>
           <b>{props.message}</b>
         </Modal.Body>
       </Modal>
