@@ -1,15 +1,13 @@
-import { Link, Navigate } from 'react-router-dom'
-import React, {useEffect, useState, useRef} from 'react'
+import { Link, Navigate } from 'react-router-dom';
+import React, {useEffect, useState, useRef} from 'react';
 import { useStateContext } from '../contexts/ContextProvider';
 import axiosClient from '../axios-client';
-
 import ModalLoginRegister from '../components/ModalLoginRegister';
-import PersistentModalLoading from '../components/PersistentModalLoading'
-
+import PersistentModalLoading from '../components/PersistentModalLoading';
 import { Container, OverlayTrigger, Popover, Image, Button, Form, Navbar, Nav, Spinner } from 'react-bootstrap';
 
 export default function NavBar() {
-    const { user, token, lightMode, baseUrl, setUser, setToken, setLogReg, setLightMode } = useStateContext()
+    const { user, token, lightMode, baseUrl, setUser, setToken, setLogReg, setLightMode } = useStateContext();
     const [showLoginRegister, setShowLoginRegister] = useState(false);
     const [persistentML, setPersistentML] = useState(false);
     const [messagePersistentModal, setMessagePersistentModal] = useState("");
@@ -24,6 +22,18 @@ export default function NavBar() {
     const [showOverlay, setShowOverlay] = useState(false);
     const target = useRef(null);
 
+    const setLightModeLocal = async(bool) => {
+        setLightMode(bool)
+        if(user.id){
+            let mode = 1;
+            if(bool){
+                mode = 0;
+            }
+            await axiosClient.get('/updateLightMode/'+user.id+'/'+mode)
+                .then(() => {})
+                .catch(() => {})
+        }
+    }
     const handleClickOutside = (event) => {
         if (target.current && !target.current.contains(event.target)) {
             setShowOverlay(false);
@@ -51,6 +61,11 @@ export default function NavBar() {
                 setSpinnerProfileImageLoading(true)
                 axiosClient.get('/user')
                     .then(({data}) => {
+                        if(Number(data.data.lM) === 1){
+                            setLightMode(false)
+                        }else{
+                            setLightMode(true)
+                        }
                         setUser(data.data)
                         setSpinnerProfileImageLoading(false)
                     })
@@ -67,10 +82,11 @@ export default function NavBar() {
             // Remove the event listener when the overlay is hidden
             document.removeEventListener('click', handleClickOutside);
         }
-        if(lightMode){
+        if(lightMode === true){
             document.body.style.backgroundColor = 'rgb(222, 221, 221)';
             document.body.style.color = '#393939';
-        }else{
+        }
+        if(lightMode === false){
             document.body.style.backgroundColor = '#4a4e52';
             document.body.style.color = 'white';
         }
@@ -81,20 +97,19 @@ export default function NavBar() {
     // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [showOverlay, lightMode]);
 
-
     return (
         <>
             { !token && <ModalLoginRegister handleClose={handleCloseLoginRegister} handleShow={handleShowLoginRegister} show={showLoginRegister} stopSpinner={setSpinnerProfileImageLoading} /> }
             <PersistentModalLoading show={persistentML} handleClose={handleClosePersistentML} message={messagePersistentModal} />
-            <Navbar expand="md" className={`${lightMode ? 'bg-body-tertiary shad' : 'bg-dark shad' }`} fixed='top'>
+            <Navbar expand="md" className={`${lightMode ? 'bg-body-tertiary' : 'bg-dark'} shad`} fixed='top'>
                 <Container>
                     <Navbar.Brand href=""><Link to="/" className='myLinkHeading'><b>Cst E-Commerce</b></Link></Navbar.Brand>
                     <Navbar.Toggle aria-controls="navbarScroll" className={`${lightMode ? 'bg-white' : 'bg-dark-subtle' }`} />
                     <Navbar.Collapse id="navbarScroll" >
                         <Nav
-                            className="me-auto mx-4 my-lg-0"
-                            style={{ maxHeight: "100px" }}
-                            navbarScroll
+                        className="me-auto mx-4 my-lg-0"
+                        style={{ maxHeight: "100px" }}
+                        navbarScroll
                         >
                             <Navbar.Brand>
                                 <Link
@@ -133,7 +148,7 @@ export default function NavBar() {
                             <Button variant="outline-info" size="sm"><i className="fa-brands fa-searchengin"></i></Button>
                         </Form>
                         <span className='px-2' style={{ display:'inline-block' }}>
-                            <Button variant={`${lightMode ? 'light' : 'dark'}`} size='sm' className='border' onClick={() => setLightMode(!lightMode)}>
+                            <Button variant={`${lightMode ? 'light' : 'dark'}`} size='sm' className='border' onClick={() => setLightModeLocal(!lightMode)}>
                                 {lightMode && <i className="fa-solid fa-moon"></i>}
                                 {!lightMode && <i className="fa-solid fa-cloud-sun"></i>}
                             </Button>

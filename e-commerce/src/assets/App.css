@@ -2,7 +2,41 @@ body{
   font-family: 'Poppins', sans-serif;
   background:rgb(222, 221, 221);
 }
-
+.custom-placeholder-color::placeholder {
+  color: rgb(134, 133, 133) !important;
+}
+.custom-placeholder-color::-webkit-input-placeholder {
+  color: rgb(134, 133, 133) !important;
+}
+.custom-placeholder-color::-ms-input-placeholder {
+  color: rgb(134, 133, 133) !important;
+}
+.cstModalBorderTop{
+  border-top:1px solid #aeaeae;
+  border-left:1px solid #aeaeae;
+  border-right:1px solid #aeaeae;
+}
+.cstModalBorderBody{
+  border-left:1px solid #aeaeae;
+  border-right:1px solid #aeaeae;
+}
+.cstModalBorderFooter{
+  border-left:1px solid #aeaeae;
+  border-right:1px solid #aeaeae;
+  border-bottom:1px solid #aeaeae;
+}
+.headerColor{
+  color: #f7ff05;
+}
+.customDanger{
+  background:#490d0d;
+  border:1px solid #d52121;
+  color:rgb(234, 230, 230);
+}
+.cstAlertHeading{
+  font-size: 16px;
+  letter-spacing: 2px;
+}
 .myLink{
   text-decoration: none;
   color:#7b7979;
@@ -88,6 +122,9 @@ small{
 }
 .borderBottom{
   border-bottom:1px solid #aeaeae;
+}
+.borderErr{
+  border:1px solid #fa1f1f;
 }
 .cstCardBody1{
   padding:5px;

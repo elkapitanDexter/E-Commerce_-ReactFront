@@ -4,7 +4,7 @@ const StateContext = createContext({
     user: null,
     token: null,
     products: [],
-    lightMode: true,
+    lightMode: localStorage.getItem('lightModeLocal'),
     setProducts: () => {},
     setUser: () => {},
     setToken: () => {},
@@ -20,7 +20,7 @@ export const ContextProvider = ({children}) => {
         email: '',
     });
     const [products, _setProducts] = useState([]);
-    const [lightMode, _setLightMode] = useState(true);
+    const [lightMode, _setLightMode] = useState(localStorage.getItem('lightModeLocal'));
     const [logReg, setLogReg] = useState(true);
     const [token, _setToken] = useState(localStorage.getItem('ACCESS_TOKEN'));
     const baseUrl = window.location.origin;
@@ -37,6 +37,8 @@ export const ContextProvider = ({children}) => {
         _setProducts(products);
     }
     const setLightMode = (bool) => {
+        localStorage.removeItem('lightModeLocal')
+        localStorage.setItem('lightModeLocal', bool)
         _setLightMode(bool)
     }
 

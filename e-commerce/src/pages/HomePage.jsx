@@ -74,7 +74,7 @@ export default function HomePage() {
     <Container>
       { loadingSkeleton &&
       <Row>
-        <HomeLoading/>
+        <HomeLoading lightMode={lightMode} />
       </Row>
       }
       { !renderNoError &&
@@ -113,16 +113,20 @@ export default function HomePage() {
             })}
           </Row>
           <div className='text-center m-5'>
-            {btnLoading && 
-              <Spinner
-              as="span"
-              animation="border"
-              role="status"
-              aria-hidden="true"
-              variant={`${lightMode ? 'secondary' : 'light'}`}
-              />
-            }
-            {!btnLoading && <Button variant="primary" onClick={loadMore}>Load more</Button>}
+          {!loadingSkeleton &&
+            <>
+              {btnLoading && 
+                <Spinner
+                as="span"
+                animation="border"
+                role="status"
+                aria-hidden="true"
+                variant={`${lightMode ? 'secondary' : 'light'}`}
+                />
+              }
+              {!btnLoading && <Button variant="primary" onClick={loadMore}>Load more</Button>}
+            </>
+          }
           </div>
         </>
       }

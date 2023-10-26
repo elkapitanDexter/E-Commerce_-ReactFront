@@ -7,9 +7,12 @@ import { Spinner, Tooltip, OverlayTrigger, InputGroup, Form, Modal, Button } fro
 import axiosClient from '../axios-client';
 
 export default function ModalLoginRegister(props) {
-    const { logReg, lightMode, setLogReg, setUser, setToken } = useStateContext()
+    const { logReg, lightMode, setLogReg, setUser, setToken, setLightMode } = useStateContext()
+
     const [alertState, setAlertState] = useState(false);
     const [alertOption, setAlertOption] = useState('danger');
+    const [alertMessage, setAlertMessage] = useState('');
+
     const [loading, setLoading] = useState(false);
     const [inputDisabled, setInputDisabled] = useState(false);
     const [nameRef, setNameRef] = useState('');
@@ -23,8 +26,6 @@ export default function ModalLoginRegister(props) {
     const [birthYear, setBirthYear] = useState(new Date().getFullYear());
     const [userN, setUserN] = useState('');
     const [userP, setUserP] = useState('');
-
-    const [alertMessage, setAlertMessage] = useState('');
 
     const startYear = 1940;
     const currentYear = new Date().getFullYear();
@@ -41,7 +42,7 @@ export default function ModalLoginRegister(props) {
         
         let err = 0;
         if(nameRef === "" || emailRef === "" || passwordRef === "" || rePasswordRef === "" || phoneRef === "" || genderRef === "" ){
-            setAlertMessage("All fields are required. Please check all empty fields and provide a value to it. Thank you.");
+            setAlertMessage("All fields are required. Please check all empty fields and provide a value to it.");
             err = 1;
         }else if(passwordRef !== rePasswordRef){
             setAlertMessage("Password did no match. Please make sure that both password fields are the same.");
@@ -50,6 +51,17 @@ export default function ModalLoginRegister(props) {
             props.stopSpinner(true);
             setAlertState(false);
             setLoading(true);
+            let lightCopyMode = 1;
+            if(lightMode){
+                lightCopyMode = 0;
+            }
+            // get current Date
+            const currentDate = new Date();
+            const year = currentDate.getFullYear();
+            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+            const day = String(currentDate.getDate()).padStart(2, '0');
+            const formattedDate = `${year}-${month}-${day}`;
+
             const payload = {
                 name: nameRef,
                 email: emailRef,
@@ -58,6 +70,9 @@ export default function ModalLoginRegister(props) {
                 phone: phoneRef,
                 gender: genderRef,
                 dateOfBirth: birthMonth + " " + birthDay + " " + birthYear,
+                lightMode: lightCopyMode,
+                dateAttempts: formattedDate,
+                numberOfAttempts: 1
             }
             setInputDisabled(true);
             performSubmitCredentialsForRegister(payload);
@@ -72,7 +87,7 @@ export default function ModalLoginRegister(props) {
 
         let err = 0;
         if(userN === "" || userP === ""){
-            setAlertMessage("All fields are required. Please check all empty fields and provide a value to it. Thank you.");
+            setAlertMessage("All fields are required. Please check all empty fields and provide a value to it.");
             err = 1;
         }else{
             props.stopSpinner(true);
@@ -93,7 +108,7 @@ export default function ModalLoginRegister(props) {
     const performSubmitCredentialsForRegister = async(payload) => {
         await axiosClient.post('/register', payload)
             .then(data => {
-                console.log(data);
+                //console.log(data);
                 let errFound = "";
                 try {
                     if(data.response.status){
@@ -128,6 +143,11 @@ export default function ModalLoginRegister(props) {
                     setAlertState(true);
                 }
                 if(data.status === 200){
+                    if(Number(data.data.user.lightMode) === 1){
+                        setLightMode(false)
+                    }else{
+                        setLightMode(true)
+                    }
                     setUser(data.data.user);
                     setToken(data.data.token);
                     props.handleClose();
@@ -200,7 +220,7 @@ export default function ModalLoginRegister(props) {
                 {inputDisabled && <div className={`padding17 ${lightMode ? 'text-dark bg-white' : 'bg-dark text-white'}`}>Please wait...</div> }
                 {!inputDisabled &&
                     <>
-                        <Modal.Header closeButton className={`${lightMode ? 'bg-light' : 'innerBaseThree'}`}>
+                        <Modal.Header closeButton className={`${lightMode ? 'bg-light' : 'innerBaseThree'} cstModalBorderTop`}>
                             <Modal.Title className={`${lightMode ? 'text-dark' : 'text-white'}`}>
                                 <h6>
                                     { logReg && 
@@ -221,8 +241,8 @@ export default function ModalLoginRegister(props) {
                     </>
                 }
                 
-                <Modal.Body className={`${lightMode ? 'bg-light' : 'innerBaseThree'}`}>
-                    { alertState && <AlertCustom  alertOption={alertOption} setAlertState={setAlertState} alertMessage={alertMessage} />}
+                <Modal.Body className={`${lightMode ? 'bg-light' : 'innerBaseThree'} cstModalBorderBody`}>
+                    { alertState && <AlertCustom alertOption={alertOption} setAlertState={setAlertState} alertMessage={alertMessage} /> }
                     { logReg && 
                         <>
                             <form onSubmit={submitLoginForm}>
@@ -474,7 +494,7 @@ export default function ModalLoginRegister(props) {
                         </>
                     }
                 </Modal.Body>
-                <Modal.Footer className={`${lightMode ? 'bg-white' : 'innerBaseThree'}`}>
+                <Modal.Footer className={`${lightMode ? 'bg-white' : 'innerBaseThree'} cstModalBorderFooter`}>
                     { logReg && 
                         <>
                             <OverlayTrigger

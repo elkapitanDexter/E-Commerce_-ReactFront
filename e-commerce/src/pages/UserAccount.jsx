@@ -1,37 +1,16 @@
 import React, { useEffect, useState } from 'react'
-import { Navigate, useParams, useNavigate } from 'react-router-dom'
+import { Navigate, useParams } from 'react-router-dom'
 import { LinkContainer } from 'react-router-bootstrap';
 import { useStateContext } from '../contexts/ContextProvider';
+import TabContent from '../components/TabContent'
 
-import { Container, Row, Col, Image, Card, Nav, Tab, Tabs } from 'react-bootstrap';
+import { Container, Row, Col, Image, Card, Nav, Tab } from 'react-bootstrap';
 
 export default function UserAccount() {
     const { user, token, baseUrl, lightMode } = useStateContext();
     const { selectedMenu, subSelectedMenu } = useParams();
     const [selection, setSelection] = useState("");
     const [activeTab, setActiveTab] = useState('MyBusiness');
-
-    const navigate = useNavigate();
-    const handleTabSelect = (eventKey) => {
-        // Navigate to the corresponding route when a tab is selected
-        switch (eventKey) {
-          case 'MyBusiness':
-            navigate('/Account/MyProducts/MyBusiness');
-            break;
-          case 'BusinessSettings':
-            navigate('/Account/MyProducts/BusinessSettings');
-            break;
-          case 'addresses':
-            navigate('/addresses');
-            break;
-          case 'changePassword':
-            navigate('/change-password');
-            break;
-          default:
-            // Handle other eventKeys if needed
-            break;
-        }
-    };
 
     useEffect(() => {
         if(!selectedMenu){
@@ -90,104 +69,7 @@ export default function UserAccount() {
                             </Card>
                         </Col>
                         <Col lg={10} className="mt-4">
-                            <Tab.Content className={`${lightMode ? 'bg-secondary-subtle' : 'bg-dark bg-gradient text-white'} cstTabContent1`}>
-                                <Tab.Pane eventKey="MyAccount">
-                                    <Tabs
-                                    defaultActiveKey="profile"
-                                    transition={false}
-                                    >
-                                        <Tab eventKey="profile" title="Profile" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            <div>My Profile</div>
-                                        </Tab>
-                                        <Tab eventKey="bankCard" title="Bank & Cards" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Your bank and cards here...
-                                        </Tab>
-                                        <Tab eventKey="addresses" title="Addresses" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Address Area here...
-                                        </Tab>
-                                        <Tab eventKey="changePassword" title="Change Password" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Change your password here...
-                                        </Tab>
-                                    </Tabs>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="MyPurchase">
-                                    <Tabs
-                                    defaultActiveKey="profile"
-                                    transition={false}
-                                    >
-                                        <Tab eventKey="profile" title="Profile" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            <div>My Purchase</div>
-                                        </Tab>
-                                        <Tab eventKey="bankCard" title="Bank & Cards" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Your bank and cards here...
-                                        </Tab>
-                                        <Tab eventKey="addresses" title="Addresses" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Address Area here...
-                                        </Tab>
-                                        <Tab eventKey="changePassword" title="Change Password" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Change your password here...
-                                        </Tab>
-                                    </Tabs>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="MyNotification">
-                                    <Tabs
-                                    defaultActiveKey="profile"
-                                    transition={false}
-                                    >
-                                        <Tab eventKey="profile" title="Profile" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            <div>My Notification</div>
-                                        </Tab>
-                                        <Tab eventKey="bankCard" title="Bank & Cards" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Your bank and cards here...
-                                        </Tab>
-                                        <Tab eventKey="addresses" title="Addresses" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Address Area here...
-                                        </Tab>
-                                        <Tab eventKey="changePassword" title="Change Password" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Change your password here...
-                                        </Tab>
-                                    </Tabs>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="MyVouchers">
-                                    <Tabs
-                                    defaultActiveKey="profile"
-                                    transition={false}
-                                    >
-                                        <Tab eventKey="profile" title="Profile" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            <div>My Voucher</div>
-                                        </Tab>
-                                        <Tab eventKey="bankCard" title="Bank & Cards" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Your bank and cards here...
-                                        </Tab>
-                                        <Tab eventKey="addresses" title="Addresses" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Address Area here...
-                                        </Tab>
-                                        <Tab eventKey="changePassword" title="Change Password" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Change your password here...
-                                        </Tab>
-                                    </Tabs>
-                                </Tab.Pane>
-                                <Tab.Pane eventKey="MyProducts">
-                                    <Tabs
-                                    activeKey={activeTab}
-                                    transition={false}
-                                    onSelect={handleTabSelect}
-                                    >
-                                        <Tab eventKey="MyBusiness" title="Business List" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            <div>My Business</div>
-                                        </Tab>
-                                        <Tab eventKey="BusinessSettings" title="Settings" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Your bank and cards here...
-                                        </Tab>
-                                        <Tab eventKey="addresses" title="Addresses" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Address Area here...
-                                        </Tab>
-                                        <Tab eventKey="changePassword" title="Change Password" className={`${lightMode ? 'bg-white' : 'bg-secondary text-white'} p-3`}>
-                                            Change your password here...
-                                        </Tab>
-                                    </Tabs>
-                                </Tab.Pane>
-                            </Tab.Content>
+                            <TabContent activeTab={activeTab} lightMode={lightMode} />
                         </Col>
                     </Row>
                 </Tab.Container>
