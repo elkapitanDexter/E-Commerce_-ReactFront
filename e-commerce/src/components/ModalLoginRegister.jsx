@@ -1,13 +1,12 @@
 import React, { useEffect, useState } from 'react'
 import { useStateContext } from '../contexts/ContextProvider';
-import AlertCustom from '../components/AlertCustom'
-
-import { Spinner, Tooltip, OverlayTrigger, InputGroup, Form, Modal, Button } from 'react-bootstrap';
-
 import axiosClient from '../axios-client';
 
+import AlertCustom from '../components/AlertCustom'
+import { Spinner, Tooltip, OverlayTrigger, InputGroup, Form, Modal, Button } from 'react-bootstrap';
+
 export default function ModalLoginRegister(props) {
-    const { logReg, lightMode, setLogReg, setUser, setToken, setLightMode } = useStateContext()
+    const { logReg, lightMode, formattedDate, setLogReg, setUser, setToken, setLightMode } = useStateContext()
 
     const [alertState, setAlertState] = useState(false);
     const [alertOption, setAlertOption] = useState('danger');
@@ -55,12 +54,6 @@ export default function ModalLoginRegister(props) {
             if(lightMode){
                 lightCopyMode = 0;
             }
-            // get current Date
-            const currentDate = new Date();
-            const year = currentDate.getFullYear();
-            const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
-            const day = String(currentDate.getDate()).padStart(2, '0');
-            const formattedDate = `${year}-${month}-${day}`;
 
             const payload = {
                 name: nameRef,

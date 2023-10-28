@@ -33,7 +33,7 @@ export default function TabContent(props) {
 
     return (
         <>
-            <ModalBusiness show={show} onHide={handleClose} />
+            <ModalBusiness show={show} onHide={handleClose} lightmode={props.lightMode.toString()} />
             <Tab.Content className={`${props.lightMode ? 'bg-secondary-subtle' : 'bg-dark bg-gradient text-white'} cstTabContent1`}>
                 <Tab.Pane eventKey="MyAccount">
                     <Tabs

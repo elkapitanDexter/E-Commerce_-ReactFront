@@ -5,6 +5,7 @@ const StateContext = createContext({
     token: null,
     products: [],
     lightMode: localStorage.getItem('lightModeLocal'),
+    formattedDate: null,
     setProducts: () => {},
     setUser: () => {},
     setToken: () => {},
@@ -42,6 +43,13 @@ export const ContextProvider = ({children}) => {
         _setLightMode(bool)
     }
 
+    // get current Date
+    const currentDate = new Date();
+    const year = currentDate.getFullYear();
+    const month = String(currentDate.getMonth() + 1).padStart(2, '0'); // Months are zero-based
+    const day = String(currentDate.getDate()).padStart(2, '0');
+    const formattedDate = `${year}-${month}-${day}`;
+
     return (
         <StateContext.Provider value={{
             user,
@@ -50,6 +58,7 @@ export const ContextProvider = ({children}) => {
             logReg,
             lightMode,
             baseUrl,
+            formattedDate,
             setProducts,
             setUser,
             setToken,
